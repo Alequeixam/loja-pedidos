@@ -1,6 +1,7 @@
 package com.alex.demo.lojapedidos.service;
 
-import com.alex.demo.lojapedidos.exceptions.CustomerNotFoundException;
+import com.alex.demo.lojapedidos.exceptions.ResourceNotFoundException;
+import com.alex.demo.lojapedidos.model.Customer;
 import com.alex.demo.lojapedidos.model.Order;
 import com.alex.demo.lojapedidos.model.enums.Status;
 import com.alex.demo.lojapedidos.repository.CustomerRepository;
@@ -8,6 +9,8 @@ import com.alex.demo.lojapedidos.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -19,14 +22,19 @@ public class OrderService {
         this.customerRepository = customerRepository;
     }
 
-    public Order createOrder(Order order, Long customerId) {
-        var customer = customerRepository.findById(customerId)
-                .orElseThrow( () -> new CustomerNotFoundException("Customer not found."));
-
-        order.setCustomerId(customer);
+    public Order createOrder(Order order) {
         order.setStatus(Status.CREATED);
         order.setDate(LocalDate.now());
 
         return orderRepository.save(order);
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+    public List<Order> getOrderByCustomerId(Long id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
+
+        return orderRepository.findByCustomerId_CustomerId(id);
     }
 }

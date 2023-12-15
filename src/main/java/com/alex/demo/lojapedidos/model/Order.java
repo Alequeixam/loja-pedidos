@@ -30,10 +30,9 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    @NotNull
     private Customer customerId;
 
-    @NotNull
+    @Column(name = "status")
     private Status status;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -41,12 +40,12 @@ public class Order {
                joinColumns = @JoinColumn(name = "order_id"),
                inverseJoinColumns = @JoinColumn(name = "product_id"))
     @NotNull
-    Set<Product> products = new HashSet<>();
+    private Set<Product> products;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "GMT")
     @Column(name = "date", nullable = false)
     @DateTimeFormat
-    @NotNull
     private LocalDate date;
+
 
 }
