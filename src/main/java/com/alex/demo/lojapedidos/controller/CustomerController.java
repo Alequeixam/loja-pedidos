@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-    private CustomerService service;
+    private final CustomerService service;
 
     public CustomerController(CustomerService service) {
         this.service = service;
