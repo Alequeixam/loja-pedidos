@@ -24,19 +24,18 @@ public class Payment {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "payment_Id")
+    @Column(name = "payment_id")
     private Long paymentId;
 
     @NotNull
-    @Column
+    @Column(name = "method")
     private PaymentMethod paymentMethod;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd",timezone = "GMT")
     @DateTimeFormat
-    @Column(name = "payment-date")
+    @Column(name = "payment_date")
     private LocalDate paymentDate;
 
-    @NotNull
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order orderId;

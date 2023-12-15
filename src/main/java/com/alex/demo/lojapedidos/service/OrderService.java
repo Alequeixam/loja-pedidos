@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -23,6 +22,9 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
+        Customer customer = customerRepository.findById(order.getCustomerId().getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", order.getCustomerId().getCustomerId()));
+
         order.setStatus(Status.CREATED);
         order.setDate(LocalDate.now());
 
