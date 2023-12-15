@@ -2,14 +2,13 @@ package com.alex.demo.lojapedidos.service;
 
 import com.alex.demo.lojapedidos.dto.CustomerDTO;
 import com.alex.demo.lojapedidos.exceptions.CPFAlreadyExistsException;
-import com.alex.demo.lojapedidos.exceptions.CustomerNotFoundException;
 import com.alex.demo.lojapedidos.exceptions.EmailAlreadyExistsException;
+import com.alex.demo.lojapedidos.exceptions.ResourceNotFoundException;
 import com.alex.demo.lojapedidos.model.Customer;
 import com.alex.demo.lojapedidos.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -19,7 +18,7 @@ public class CustomerService {
         this.repository = repository;
     }
 
-    public Customer create(CustomerDTO customer) {
+    public CustomerDTO create(CustomerDTO customer) {
 
         List<Customer> allCustomers = repository.findAll();
 
@@ -35,8 +34,9 @@ public class CustomerService {
         objCustomer.setName(customer.name());
         objCustomer.setCpf(customer.cpf());
         objCustomer.setEmail(customer.email());
+        repository.save(objCustomer);
 
-        return repository.save(objCustomer);
+        return mapToDTO(objCustomer);
     }
 
     public List<CustomerDTO> getCustomers() {
@@ -46,13 +46,13 @@ public class CustomerService {
     }
 
     public CustomerDTO getCustomerById(Long id) {
-        var customer = repository.findById(id).orElseThrow( () -> new CustomerNotFoundException("Customer not found."));
+        var customer = repository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Customer", "id", id));
 
         return mapToDTO(customer);
     }
 
     public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
-        var customer = repository.findById(id).orElseThrow( () -> new CustomerNotFoundException("Customer not found."));
+        var customer = repository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Customer", "id", id));
 
         customer.setCustomerId(id);
         customer.setName(customerDTO.name());

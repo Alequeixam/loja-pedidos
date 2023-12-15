@@ -1,7 +1,6 @@
 package com.alex.demo.lojapedidos.controller;
 
 import com.alex.demo.lojapedidos.dto.CustomerDTO;
-import com.alex.demo.lojapedidos.model.Customer;
 import com.alex.demo.lojapedidos.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO) {
-        service.create(customerDTO);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(customerDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
